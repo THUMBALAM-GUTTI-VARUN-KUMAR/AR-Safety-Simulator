@@ -3,40 +3,6 @@ using System.Collections.Generic;
 
 namespace ARSafetySimulator.Assessment
 {
-    public enum ActionType
-    {
-        Correct,
-        Incorrect,
-        CriticalFailure
-    }
-
-    public class ActionRecord
-    {
-        public string ActionId { get; set; }
-        public ActionType Type { get; set; }
-        public int Points { get; set; }
-        public float Timestamp { get; set; }
-    }
-
-    public class ScoringRule
-    {
-        public string ScenarioId { get; set; }
-        public int MaxScore { get; set; }
-        public int PassingScore { get; set; }
-        public float MaxTimeSeconds { get; set; }
-    }
-
-    public class AssessmentResult
-    {
-        // Must match API_CONTRACT.md keys when serialized to JSON
-        public string trainee_id;
-        public string scenario_id;
-        public int score;
-        public int duration_seconds;
-        public int mistakes;
-        public bool passed;
-    }
-
     /// <summary>
     /// Deterministic Scoring Engine. 
     /// Does NOT rely on AI or external APIs for core safety-critical evaluations.
@@ -45,17 +11,19 @@ namespace ARSafetySimulator.Assessment
     {
         private string traineeId;
         private ScoringRule rule;
-        private List<ActionRecord> actions;
+        private List<GasLeakEvent> events;
         private float startTime;
         private float endTime;
         private bool hasCriticalFailure;
+        private string sessionId;
 
-        public AssessmentEngine(string traineeId, ScoringRule rule)
+        public AssessmentEngine(string traineeId, ScoringRule rule, string sessionId = null)
         {
             this.traineeId = traineeId;
             this.rule = rule;
-            this.actions = new List<ActionRecord>();
+            this.events = new List<GasLeakEvent>();
             this.hasCriticalFailure = false;
+            this.sessionId = string.IsNullOrEmpty(sessionId) ? Guid.NewGuid().ToString() : sessionId;
         }
 
         public void StartScenario(float currentTimestampSeconds)
@@ -63,17 +31,16 @@ namespace ARSafetySimulator.Assessment
             startTime = currentTimestampSeconds;
         }
 
-        public void RecordAction(string actionId, ActionType type, int points, float currentTimestampSeconds)
+        public void RecordEvent(GasLeakEvent telemetryEvent)
         {
-            actions.Add(new ActionRecord
-            {
-                ActionId = actionId,
-                Type = type,
-                Points = points,
-                Timestamp = currentTimestampSeconds
-            });
+            telemetryEvent.sessionId = this.sessionId;
+            telemetryEvent.traineeId = this.traineeId;
+            telemetryEvent.scenarioId = rule.ScenarioId;
+            telemetryEvent.timestampIso = DateTime.UtcNow.ToString("o");
+            
+            events.Add(telemetryEvent);
 
-            if (type == ActionType.CriticalFailure)
+            if (telemetryEvent.isCriticalHazard)
             {
                 hasCriticalFailure = true;
             }
@@ -85,13 +52,30 @@ namespace ARSafetySimulator.Assessment
             int totalScore = 0;
             int mistakes = 0;
 
-            foreach (var action in actions)
+            foreach (var ev in events)
             {
-                totalScore += action.Points;
-                if (action.Type == ActionType.Incorrect || action.Type == ActionType.CriticalFailure)
+                if (ev.isCorrect)
                 {
+                    // Add points based on stepId
+                    var actionScore = rule.CorrectActionPoints.Find(a => a.stepId == ev.stepId);
+                    if (actionScore != null)
+                    {
+                        totalScore += actionScore.points;
+                    }
+                }
+                else
+                {
+                    totalScore -= ev.penaltyPoints;
                     mistakes++;
                 }
+            }
+
+            int duration = (int)Math.Round(endTime - startTime);
+
+            // Time bonus
+            if (rule.TimeBonusPoints > 0 && duration <= rule.TimeBonusThreshold && !hasCriticalFailure)
+            {
+                totalScore += rule.TimeBonusPoints;
             }
 
             // Ensure score does not drop below 0
@@ -99,20 +83,27 @@ namespace ARSafetySimulator.Assessment
             
             // Ensure score does not exceed maximum
             totalScore = Math.Min(totalScore, rule.MaxScore);
-
-            int duration = (int)Math.Round(endTime - startTime);
             
+            // Timeout failure condition
+            if (duration > rule.MaxTimeSeconds)
+            {
+                hasCriticalFailure = true;
+            }
+
             // Trainee passes if there are no critical failures AND they met the point threshold
             bool passed = !hasCriticalFailure && (totalScore >= rule.PassingScore);
 
             return new AssessmentResult
             {
-                trainee_id = traineeId,
+                session_id = this.sessionId,
+                trainee_id = this.traineeId,
                 scenario_id = rule.ScenarioId,
                 score = totalScore,
                 duration_seconds = duration,
                 mistakes = mistakes,
-                passed = passed
+                passed = passed,
+                is_synced = false,
+                events = this.events
             };
         }
     }
