@@ -1,28 +1,19 @@
-# Safety Scenarios
+# Industrial Safety Scenarios — Jharkhand Mining & Manufacturing
 
-## MVP Scenarios
+## 1. Scenario Catalog Overview
+1. **SCENARIO 01: Underground Mine / Industrial Plant Gas Leak Response (Priority Focus - Day 1)**
+2. **SCENARIO 02**: Electrical Lockout/Tagout (LOTO) & Conveyor Belt Safety.
+3. **SCENARIO 03**: Slope Stability Inspection & Rockfall Evacuation.
 
-### 1. Gas Leak / Confined Space
-- **Hazard:** Toxic gas presence or oxygen deficiency.
-- **Objectives:**
-  - Detect leak or low O2.
-  - Equip appropriate PPE (Mask/Respirator).
-  - Find and close the source valve.
-  - Evacuate safely.
-- **Mistakes / Penalties:**
-  - Proceeding without checking air quality.
-  - Failing to wear PPE.
-  - Generating sparks near a flammable leak.
+## 2. Gas Leak Hazard Breakdown (Scenario 01)
+- **Primary Hazards**: Toxic $CO$ buildup, Flammable Methane ($CH_4$) concentration exceeding lower explosive limit (LEL > 1.25% in mine air as per CMR 2017), Oxygen depletion ($O_2 < 19.5\%$).
+- **Key Safety Mandates**:
+  - Immediate identification of gas alarm / gas monitor readings.
+  - Donning Self-Contained Breathing Apparatus (SCBA) or Self-Rescuer (FSR).
+  - Manual Call Point / Alarm Activation to warn co-workers downstream.
+  - Checking Wind direction / Airflow ventilation indicator to evacuate *upwind* or along designated fresh air base escape route.
+  - Proceeding to designated Safe Haven / Mine Rescue Refuge Chamber / Assembly Point.
 
-### 2. Fire / Explosion
-- **Hazard:** Open flame, risk of secondary explosions.
-- **Objectives:**
-  - Sound the alarm immediately.
-  - Identify the class of fire.
-  - Select the correct type of fire extinguisher.
-  - Follow the PASS method (Pull, Aim, Squeeze, Sweep).
-  - Evacuate via the designated route.
-- **Mistakes / Penalties:**
-  - Using water on an electrical fire (Critical failure).
-  - Failing to sound the alarm first.
-  - Standing too close to the fire source.
+---
+> [!IMPORTANT]
+> **Safety Notice**: DGMS regulation (Coal Mines Regulations 2017 - Regulation 169/170) mandates that self-rescuers must be used immediately upon gas alarm detection and trainees must never travel downwind through contaminated air shafts.
