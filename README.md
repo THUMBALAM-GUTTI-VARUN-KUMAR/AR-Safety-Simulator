@@ -42,5 +42,33 @@ See [TEAM_WORKFLOW.md](docs/TEAM_WORKFLOW.md) for role assignments.
 3. Do not alter the core [API Contract](docs/API_CONTRACT.md) without team consensus.
 
 ## Development Status
-Current Status: **Phase 2 (Architecture and repository setup)**
-See [PROJECT_SPECIFICATION.md](docs/PROJECT_SPECIFICATION.md) for full roadmap.
+Current Status: **Phase 3 (MVP Implemented)**
+- **Unity AR Client:** Offline-first assessment engine implemented.
+- **Backend API:** FastAPI REST endpoints and SQLite database implemented.
+- **Admin Dashboard:** React/Vite analytics dashboard implemented.
+
+## How to Run Locally
+
+### 1. Start the Backend API
+The backend requires Python 3.9+.
+```bash
+cd backend
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
+
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+The API will run at `http://127.0.0.1:8000`
+
+### 2. Start the Admin Dashboard
+The dashboard requires Node.js.
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+The dashboard will run at `http://localhost:5173`
