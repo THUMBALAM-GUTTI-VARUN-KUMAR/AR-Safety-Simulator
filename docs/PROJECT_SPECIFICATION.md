@@ -1,47 +1,27 @@
-# Project Specification
+# AR-Based Vocational Training Simulator for Industrial Safety
+## Jharkhand Mining & Manufacturing Sector — Project Specification
 
-## Project Goal
-We are building a smartphone-first Android AR industrial safety training platform for Jharkhand's Mining & Manufacturing Sector.
+### 1. Vision & Executive Summary
+This project delivers an Augmented Reality (AR) mobile application tailored for industrial safety training in Jharkhand’s mining (coal, iron ore, mica, copper) and heavy manufacturing sectors (steel plants, chemical processing). Target users are industrial trainees, underground mine workers, and plant operators who require high-retention, practical hazard response training without real-world exposure to extreme hazards.
 
-The trainee should eventually be able to:
-1. Open Android AR application
-2. Select language
-3. Select a safety training module
-4. Enter an AR training scenario
-5. Interact with hazards/equipment
-6. Perform safety actions
-7. Receive assessment and score
-8. Save results offline
-9. Synchronize results when internet returns
-10. Receive a certificate after passing
-11. Have the certificate verified using QR
-12. Allow administrators to monitor training through a web dashboard
+### 2. Primary Use Case & Domain Focus (Jharkhand Region)
+- **Sector Focus**: Underground coal/metal mines (e.g., Jharia, Bokaro, West Singhbhum) and heavy industries (Jamshedpur, Ranchi).
+- **Core Hazard Types**:
+  1. Toxic & Flammable Gas Ingress (Methane $CH_4$, Carbon Monoxide $CO$, Hydrogen Sulfide $H_2S$, Oxygen Deficiency $O_2$).
+  2. Slope Instability & Roof Falls.
+  3. Electrical & Machinery Conveyor Safety.
 
-## MVP Scenarios
-1. Gas Leak / Confined Space
-2. Fire / Explosion
+### 3. Key Target Technical Constraints (Day 1 Baseline)
+- **Target Device Class**: Mid-range Android smartphone (e.g., Snapdragon 680 / Helio G99 / Exynos 1280, 4–6 GB RAM, ARCore support).
+- **AR Framework**: Unity AR Foundation (ARCore backend).
+- **Asset Poly Budget**: Max 25,000 triangles total per active scene (< 5,000 tris per major asset).
+- **Texture Budget**: $512 \times 512$ to $1024 \times 1024$ uncompressed or compressed ASTC/ETC2, shared texture atlases.
+- **Frame Rate Target**: Stable $30\text{ FPS}$ to $60\text{ FPS}$ in handheld AR mode to prevent simulator sickness.
 
-## Development Phases
+### 4. Team Division of Responsibilities
+- **Person 1 (AR Lead / Unity Integration)**: Responsible for Unity scene hierarchy, AR Foundation tracking, user UI setup, event dispatch, and client logic.
+- **Person 2 (3D Assets & Safety Scenario Lead - CURRENT ROLE)**: Responsible for hazard scenario specifications, industrial safety workflow logic, lightweight 3D asset sourcing, asset optimization specifications, licensing compliance, and assessment telemetry payload definitions.
 
-### DAY 1 PRIORITY
-- Phase 0: Team bootcamp
-- Phase 1: Problem understanding and MVP definition
-- Phase 2: Architecture and repository setup
-- Phase 3: Basic AR prototype
-
-### DAY 2 PRIORITY
-- Phase 4: Reusable scenario engine
-- Phase 5: Gas Leak scenario
-- Phase 6: Assessment + offline
-- Phase 7: Backend + synchronization
-
-### DAY 3 PRIORITY
-- Phase 8: Admin dashboard
-- Phase 12: Integration
-- Phase 13: Testing and optimization
-- Phase 14: SIH presentation/demo
-
-### POST-MVP
-- Phase 9: Fire/Explosion scenario
-- Phase 10: QR certificate
-- Phase 11: Hindi + Santali
+---
+> [!IMPORTANT]
+> **Safety Verification Note**: All safety protocols specified herein must be verified against authoritative industrial standards (DGMS - Directorate General of Mines Safety, Coal Mines Regulations CMR 2017, and Factories Act 1948) prior to deployment in final certified training modules.
